@@ -1,0 +1,17 @@
+TUSHAR GIDADHUBLI
+
+Purple edition with detailed 3D artifacts, circular black and white landing-page koi, a complete personal story, and all 11 professional roles.
+
+ON A PHONE
+The landing artifacts form a living 3D orbit. Swipe to move through them and tap the focused object to enter its chapter.
+
+QUICKEST WAY TO PUBLISH
+Upload the CONTENTS of ready-to-publish to your GitHub repository.
+Then Settings > Pages > Deploy from a branch > your branch > / (root).
+Keep index.html, assets, and artifacts together.
+
+TO EDIT THE WEBSITE
+Use the source folder. See README.md for local setup and automatic GitHub publishing.
+
+CONTACT
+Email and LinkedIn are active. Edit them in source/src/content.js, then rebuild.

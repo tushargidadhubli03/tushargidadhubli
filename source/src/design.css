@@ -1,0 +1,1067 @@
+/* ==========================================================================================
+   DESIGN LAYER
+   styles.css holds structure — grids, positions, responsive behaviour. This file holds the
+   visual language, and it loads last. Everything here is driven by four tokens the active
+   chapter publishes: --ground, --fg, --dim, --accent. The page travels through them as you
+   scroll instead of sitting on one flat tint.
+   ========================================================================================== */
+
+:root{
+  --ground:#0A0810; --fg:#EFECF5; --dim:#8E86A0; --accent:#A87BFF;
+  --surface:#151120; --hair:#EFECF51c;
+
+  /* the old variables, re-pointed so inherited rules follow the new system */
+  --ink:var(--fg); --muted:var(--dim); --line:var(--hair); --scene-bg:var(--ground);
+
+  --display:'Archivo Variable','Archivo',Helvetica,sans-serif;
+  --read:'Newsreader Variable','Newsreader',Georgia,serif;
+  --ui:'DM Sans',system-ui,sans-serif;
+
+  /* one scale, used everywhere. No arbitrary sizes. */
+  --t-hero:clamp(4.2rem,15vw,15rem);
+  --t-1:clamp(2.6rem,7.4vw,6.4rem);
+  --t-2:clamp(1.9rem,3.8vw,3.2rem);
+  --t-3:clamp(1.35rem,2.2vw,1.85rem);
+  --t-body:clamp(1rem,1.12vw,1.14rem);
+  --t-small:.8rem;
+
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+}
+
+html{background:var(--ground);transition:background .9s cubic-bezier(.4,0,.2,1)}
+body{
+  background:var(--ground);
+  color:var(--fg);
+  font-family:var(--ui);
+  font-size:var(--t-body);
+  transition:background .9s cubic-bezier(.4,0,.2,1),color .9s cubic-bezier(.4,0,.2,1);
+}
+.experience:before{display:none}
+::selection{background:var(--accent);color:var(--ground)}
+
+/* ---- display type ----------------------------------------------------------------------
+   Archivo's width axis is live. Type narrows as the page moves and widens at rest, and the
+   perspective axis lightens it toward the doubt side. This is the one thing on the site that
+   is genuinely typographic rather than decorative. */
+.hero-name,.chapter-title,.big-type{
+  font-family:var(--display);
+  font-variation-settings:'wdth' calc(112 - var(--speed,0) * 26),'wght' calc(760 - var(--axis,0) * 220);
+  letter-spacing:-.045em;
+  line-height:.86;
+  text-wrap:balance;
+  margin:0;
+}
+
+/* ---- reading type ---------------------------------------------------------------------- */
+.chapter-copy p,.story-passage p,.career-timeline p,.urbanysis-block p,.reading-note p,
+.dual-read p,.career-prologue p,.mpi-list span,.bii-rationale,.plot-note{
+  font-family:var(--read);
+  font-optical-sizing:auto;
+  font-size:clamp(1.06rem,1.35vw,1.22rem);
+  line-height:1.62;
+  color:var(--fg);
+  opacity:.9;
+  max-width:60ch;
+}
+.lead{
+  font-family:var(--read)!important;
+  font-size:clamp(1.3rem,2.1vw,1.7rem)!important;
+  line-height:1.4!important;
+  color:var(--fg)!important;
+  opacity:.72;
+  max-width:36ch;
+}
+
+/* ==========================================================================================
+   THE OLD PALETTE, OVERRIDDEN
+   Forty hardcoded purples sat in one narrow value band. Everything below re-points them at
+   the chapter tokens so the whole page moves together.
+   ========================================================================================== */
+
+.masthead{background:none}
+.wordmark,.desktop-nav button,.hello-link,.menu-button{color:var(--fg)}
+.desktop-nav button.current{color:var(--accent)}
+.hello-link{border-bottom:1px solid var(--accent)}
+
+.scene-caption span,.scene-caption p,.scene-caption small{color:var(--dim);font-family:var(--ui)}
+.scene-caption span{font-family:var(--display);font-variation-settings:'wght' 300;font-size:2.4rem;opacity:.5}
+
+.story-meta{color:var(--dim);border-bottom:1px solid var(--hair);padding-bottom:1rem}
+.story-index a{color:var(--dim)}
+.story-index a:hover{color:var(--accent)}
+.passage-number{color:var(--accent);opacity:.75;font-family:var(--ui);font-size:.68rem;letter-spacing:.18em}
+.story-passage h3{font-family:var(--display);font-variation-settings:'wdth' 92,'wght' 620;font-size:var(--t-2);letter-spacing:-.03em;line-height:1.02;color:var(--fg)}
+.signature-line{font-family:var(--read)!important;font-style:italic;font-size:clamp(1.5rem,3vw,2.2rem)!important;line-height:1.24!important;opacity:1!important;color:var(--accent)!important}
+
+.current-role{background:var(--surface);color:var(--fg);border:1px solid var(--hair);border-radius:0;box-shadow:none}
+.current-role h3{font-family:var(--display);font-variation-settings:'wdth' 88,'wght' 680;font-size:clamp(2rem,4.2vw,3.4rem);letter-spacing:-.04em;line-height:.94;color:var(--fg)}
+.current-role>strong{color:var(--accent)}
+.current-role>p{color:var(--fg);opacity:.75;font-family:var(--read)}
+.current-role blockquote{font-family:var(--read);font-style:italic;color:var(--accent);font-size:clamp(1.6rem,3.2vw,2.4rem);line-height:1.2}
+.role-progression{border-color:var(--hair);color:var(--fg)}
+.role-progression small{color:var(--dim)}
+
+.capabilities,.capabilities article{border-color:var(--hair)}
+.capabilities article>span{font-family:var(--ui);font-size:.7rem;letter-spacing:.16em;color:var(--accent);opacity:.8}
+.capabilities h4{font-family:var(--display);font-variation-settings:'wdth' 96,'wght' 600;font-size:1.15rem;letter-spacing:-.02em;color:var(--fg)}
+.capabilities p{color:var(--fg);opacity:.72}
+.work-evidence{font-family:var(--read)!important;font-style:italic;color:var(--fg)!important;opacity:.7}
+
+.editorial-heading h3,.career-prologue h4,.career-timeline h4,.urbanysis-head h3,.skills-note h3,
+.memory-card h3,.reading-note h3,.future-option h3,.explore-menu h2,.axis-invitation h3,.block-top h4{
+  font-family:var(--display);
+  font-variation-settings:'wdth' 90,'wght' 640;
+  letter-spacing:-.035em;
+  line-height:.98;
+  color:var(--fg);
+}
+.editorial-heading h3,.skills-note h3,.memory-card h3,.future-option h3{font-size:var(--t-2)}
+.reading-note h3{font-size:clamp(2rem,4vw,3rem);font-style:normal;color:var(--accent)}
+.career-timeline h4,.career-prologue h4,.block-top h4{font-size:var(--t-3)}
+
+.career-timeline{border-left:1px solid var(--hair)}
+.career-dot{background:var(--ground);border:1px solid var(--accent)}
+.career-timeline article.latest{background:var(--surface);border-radius:0}
+.career-timeline article.latest .career-dot{background:var(--accent)}
+.role-identity{border-bottom:1px solid var(--hair)}
+.role-identity .role-count{font-family:var(--ui);font-size:.7rem;letter-spacing:.14em;color:var(--accent)}
+.role-identity strong{color:var(--fg);font-family:var(--display);font-variation-settings:'wght' 600}
+.role-identity div>span,.role-identity time{color:var(--dim)}
+.career-view-switch{border:1px solid var(--hair);border-radius:0}
+.career-view-switch button{border-radius:0;color:var(--dim);font-family:var(--ui)}
+.career-view-switch button[aria-pressed=true]{background:var(--accent);color:var(--ground)}
+
+.experience-ledger,.experience-ledger button,.experience-ledger .ledger-record{border-color:var(--hair)}
+.experience-ledger button>strong,.ledger-record>strong{color:var(--fg);font-family:var(--display);font-variation-settings:'wght' 560}
+.experience-ledger button>span,.experience-ledger button>em,.ledger-record>span,.ledger-record>em,.ledger-record>small,.ledger-intro{color:var(--dim)}
+
+.skills-note{border-top:1px solid var(--hair)}
+.skills-note>p{color:var(--accent)}
+.skill-rows span{border-top:1px solid var(--hair);color:var(--fg);opacity:.8}
+
+.name-origin{color:var(--accent)}
+.name-origin>span{font-family:var(--display);font-variation-settings:'wdth' 70,'wght' 700;opacity:.5}
+.name-origin>strong{font-family:var(--display);font-variation-settings:'wdth' 62,'wght' 800;font-style:normal;font-size:clamp(5rem,18vw,13rem);letter-spacing:-.06em;color:var(--fg)}
+.listening-room{background:var(--surface);color:var(--fg);border:1px solid var(--hair);border-radius:0;box-shadow:none}
+.spotify-activate{background:none;border:1px solid var(--hair);border-radius:0;color:var(--fg)}
+.spotify-activate strong{font-family:var(--display);font-variation-settings:'wght' 600;font-size:1.6rem}
+.spotify-activate small,.listening-room .fine-print{color:var(--dim)}
+.play-circle{border-color:var(--accent);color:var(--accent)}
+
+.book-picker{border-color:var(--hair)}
+.book-picker button{font-family:var(--display);font-variation-settings:'wdth' 94,'wght' 520;font-size:1.25rem;letter-spacing:-.02em;color:var(--dim)}
+.book-picker button.selected{border-bottom-color:var(--accent);color:var(--fg)}
+.book-picker button span{color:var(--dim);font-family:var(--ui)}
+
+.memory-card{border-color:var(--hair)}
+.memory-card p{font-family:var(--read)!important;font-size:clamp(1.2rem,2.2vw,1.6rem)!important;line-height:1.42!important;opacity:.88}
+.breathing-moment{border:1px solid var(--hair);border-radius:0;background:var(--surface)}
+.breathing-moment>p{font-family:var(--read);font-style:italic;color:var(--accent)}
+.breath-line{background:var(--hair)}
+.breath-line span{background:var(--accent)}
+
+.side-note,.big-quote{font-family:var(--read)!important;font-style:italic;color:var(--accent)!important}
+.big-quote{font-size:clamp(1.8rem,4vw,3rem)!important;line-height:1.14!important;max-width:18ch}
+.hoop-game{background:var(--surface);border:1px solid var(--hair);border-radius:0}
+.game-score,.hoop-game>small{color:var(--dim)}
+.game-score strong{font-family:var(--display);font-variation-settings:'wght' 700;color:var(--fg)}
+.game-message{font-family:var(--read);font-style:italic;color:var(--accent)}
+.solid-button{background:var(--accent);color:var(--ground);border-radius:0}
+.solid-button:hover{filter:brightness(1.12)}
+.game-controls input{accent-color:var(--accent)}
+
+.future-option{border-top:1px solid var(--hair)}
+.future-option>span{color:var(--accent);font-family:var(--ui)}
+.future-option p{color:var(--fg);opacity:.72}
+.contact-email,.contact-links a{border-color:var(--hair);color:var(--fg)}
+.contact-email a:hover,.contact-links a:hover{color:var(--accent)}
+.closing-signature{font-family:var(--display);font-variation-settings:'wdth' 74,'wght' 300;font-style:normal;font-size:clamp(2.4rem,7vw,5.4rem);letter-spacing:-.05em;line-height:.92;color:var(--fg)}
+.endnote{border-top:1px solid var(--hair);color:var(--dim)}
+
+.axis-invitation{background:var(--surface);border:1px solid var(--hair);border-radius:0}
+.axis-invitation h3{font-size:var(--t-2)}
+.axis-invitation p{color:var(--fg);opacity:.75}
+.axis-title,.axis-ends button{color:var(--dim);font-family:var(--ui)}
+.axis-reading{font-family:var(--read);color:var(--accent)}
+.axis-line{background:linear-gradient(90deg,#0A0810,var(--dim) 50%,#F2EFF7)}
+.axis-koi-black{background:#0A0810;box-shadow:0 0 0 1px var(--dim)}
+.axis-koi-white{background:#F2EFF7;border-color:transparent}
+.axis-track input[type=range]::-webkit-slider-thumb{background:var(--ground);border-color:var(--accent)}
+.axis-track input[type=range]::-moz-range-thumb{background:var(--ground);border-color:var(--accent)}
+
+.urbanysis{border-top:1px solid var(--hair)}
+.urbanysis-head h3{font-size:var(--t-2)}
+.urbanysis-lede,.urbanysis-role,.claim-key,.bii figcaption p,.mpi>p{color:var(--fg);opacity:.72}
+.urbanysis-toggle{border:1px solid var(--accent);border-radius:0;color:var(--accent)}
+.urbanysis-toggle:hover{background:var(--accent);color:var(--ground)}
+.urbanysis-block,.bii,.mpi{border-color:var(--hair)}
+.claim-developed{background:var(--accent);color:var(--ground)}
+.claim-envisioned{background:none;color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.claim-outcome{background:var(--dim);color:var(--ground)}
+.bii-name{color:var(--fg)}
+.bii-bar{background:var(--hair);border-radius:0}
+.bii-bar i{background:var(--accent);border-radius:0}
+.bii-value{color:var(--accent);font-family:var(--ui)}
+.mpi-list{background:var(--hair);border-color:var(--hair)}
+.mpi-list li{background:var(--ground)}
+.mpi-list strong{color:var(--fg);font-family:var(--display);font-variation-settings:'wght' 600}
+
+.plot-grid,.plot-axis{stroke:var(--dim)}
+.plot-year,.plot-label{fill:var(--dim);font-family:var(--ui)}
+.plot-row.tier-story .plot-bar{fill:var(--accent)}
+.plot-row.tier-story .plot-label{fill:var(--fg)}
+.plot-row.tier-record .plot-bar{fill:none;stroke:var(--dim)}
+.plot-row.is-hover .plot-hit{fill:var(--hair)}
+.plot-readout{font-family:var(--read);color:var(--accent)}
+
+.object-label{color:var(--fg);font-family:var(--display);font-variation-settings:'wdth' 88,'wght' 560;letter-spacing:-.02em}
+.object-label span{color:var(--accent)}
+.chapter-control,.control-actions{background:color-mix(in srgb,var(--ground) 82%,transparent);border:1px solid var(--hair);border-radius:0;color:var(--fg)}
+.chapter-control>span{font-family:var(--ui);font-size:.66rem;letter-spacing:.14em;color:var(--accent)}
+.motion-control,.reading-control{color:var(--dim)}
+.reading-progress span{background:var(--accent)}
+.menu-scrim{background:color-mix(in srgb,var(--ground) 72%,transparent)}
+.explore-menu{background:var(--surface);color:var(--fg);box-shadow:none;border-left:1px solid var(--hair)}
+.explore-menu h2{font-size:var(--t-2)}
+.explore-menu nav,.explore-menu nav>button{border-color:var(--hair)}
+.explore-menu nav>button>span{color:var(--accent);font-family:var(--ui)}
+.explore-menu nav>button>strong{font-family:var(--display);font-variation-settings:'wdth' 92,'wght' 540;font-size:1.3rem;letter-spacing:-.02em;color:var(--fg)}
+.menu-axis strong{font-family:var(--read);color:var(--accent)}
+.icon-button{color:var(--fg)}
+button:focus-visible,a:focus-visible,input:focus-visible{outline-color:var(--accent)}
+.text-link{color:var(--accent);border-bottom-color:currentColor}
+.opening-floor>span{font-family:var(--read);font-style:italic;color:var(--dim)}
+.opening-floor>button{border:1px solid var(--hair);color:var(--fg)}
+
+/* ---- grain. One overlay, cheap, and it does more for perceived quality than any effect. */
+.experience:after{
+  content:'';position:fixed;inset:0;z-index:70;pointer-events:none;opacity:.055;
+  background-image:var(--grain);background-size:180px 180px;mix-blend-mode:overlay;
+}
+
+
+/* ---- chapter openings ------------------------------------------------------------------
+   Four scales, chosen per chapter. The old site opened every chapter at the same size in
+   the same shape — short phrase, line break, italic payoff word, nine times running. */
+.chapter-title{margin:0 0 1.6rem}
+.chapter-title.scale-xl{font-size:var(--t-hero);font-variation-settings:'wdth' 68,'wght' 780;letter-spacing:-.055em;line-height:.82}
+.chapter-title.scale-lg{font-size:var(--t-1);font-variation-settings:'wdth' 86,'wght' 680;letter-spacing:-.04em;line-height:.92;max-width:15ch}
+.chapter-title.scale-md{font-size:var(--t-2);font-variation-settings:'wdth' 100,'wght' 480;letter-spacing:-.025em;line-height:1.06;max-width:20ch}
+.chapter-title.scale-sm{font-size:var(--t-3);font-variation-settings:'wdth' 104,'wght' 560;letter-spacing:-.01em;line-height:1.2}
+.chapter-title em{font-style:normal;color:var(--accent)}
+
+/* Quiet, sentence case, no letterspaced shouting. */
+.eyebrow,.section-kicker{
+  font-family:var(--ui)!important;
+  font-size:.74rem!important;
+  letter-spacing:.01em!important;
+  text-transform:none!important;
+  color:var(--dim)!important;
+  display:block;
+  margin-bottom:.7rem;
+}
+.scene-caption p{font-family:var(--ui);font-size:.74rem;letter-spacing:.01em;color:var(--dim)}
+.scene-caption small{display:none}
+
+/* Hero */
+.hero-name{font-size:var(--t-hero);font-variation-settings:'wdth' calc(70 - var(--speed,0) * 8),'wght' 800;letter-spacing:-.055em;line-height:.8}
+.hero-name .surname{font-size:.99em;display:block}
+.hero-subline{font-family:var(--read);font-style:italic;font-size:clamp(1.05rem,1.7vw,1.4rem);color:var(--dim);margin-top:1.4rem}
+.opening-links button{font-family:var(--ui);font-size:.86rem;color:var(--fg);border-bottom:1px solid var(--hair);padding-bottom:.35rem}
+.opening-links button:hover{border-bottom-color:var(--accent);color:var(--accent)}
+
+/* ==========================================================================================
+   TWO DISPLAY VOICES, WITH DIFFERENT JOBS
+   Newsreader opens the chapters — a real reading serif with optical sizing, not the
+   Cormorant italic that every generated site reaches for. Archivo carries the name, the
+   role headings and the interface. The old rules were more specific than mine, so these
+   match .chapter-copy>h2 exactly rather than fighting it with !important.
+   ========================================================================================== */
+.chapter-copy>h2.chapter-title{
+  font-family:var(--read);
+  font-optical-sizing:auto;
+  font-style:normal;
+  color:var(--fg);
+  margin:0 0 1.5rem;
+}
+.chapter-copy>h2.scale-xl{font-size:clamp(4rem,11vw,9rem);font-weight:400;letter-spacing:-.045em;line-height:.88}
+.chapter-copy>h2.scale-lg{font-size:clamp(2.7rem,6.4vw,5.4rem);font-weight:400;letter-spacing:-.03em;line-height:.96;max-width:13ch}
+.chapter-copy>h2.scale-md{font-size:clamp(2rem,3.9vw,3.1rem);font-weight:400;letter-spacing:-.018em;line-height:1.1;max-width:19ch}
+.chapter-copy>h2.scale-sm{font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:500;letter-spacing:-.01em;line-height:1.18}
+.chapter-copy>h2.chapter-title em{font-style:italic;color:var(--accent)}
+
+/* Hero name: must fit the viewport at every width. Width axis does the fitting, not luck. */
+.opening .opening-copy .hero-name{
+  font-family:var(--display);
+  font-size:min(15.5vw,13rem);
+  font-variation-settings:'wdth' calc(76 - var(--speed,0) * 10),'wght' 800;
+  letter-spacing:-.05em;
+  line-height:.84;
+  white-space:nowrap;
+}
+.opening .opening-copy .hero-name .surname{font-size:.615em;letter-spacing:-.035em}
+
+/* The stray bright edge on dark cards was a leftover inset shadow. */
+.current-role,.career-timeline article.latest{box-shadow:none!important;border-left:1px solid var(--hair)!important}
+
+/* The scroll cue and the floor note were colliding with the control bar. */
+.opening-floor{bottom:calc(var(--floor-gap,86px))!important;align-items:center}
+.opening-floor>button{width:38px;height:38px;border-radius:50%;display:grid;place-items:center}
+@media(max-width:760px){.opening-floor{--floor-gap:96px}}
+
+.etymology{font-family:var(--read);font-size:1.05rem;color:var(--dim);margin:0 0 2rem;max-width:44ch}
+.etymology span{color:var(--accent)}
+/* The chapter label was floating loose over the canvas; anchor it as a quiet running head. */
+.scene-caption{top:auto!important;bottom:18px!important;left:3.2vw!important;padding:0!important}
+
+/* The koi canvas was sized to the opening *section* (942px) while the viewport was 900px,
+   so the bottom of the orbit always sat below the fold. The canvas is the visible frame. */
+.landing-koi{top:0!important;height:100svh!important;max-height:100svh!important}
+.opening{min-height:100svh;height:100svh;overflow:hidden}
+.opening-copy{padding-top:clamp(84px,12vh,132px)!important;padding-bottom:0!important;height:auto!important}
+.opening-links{margin-top:1.6rem}
+
+/* The floating chapter label duplicated the pill in the corner. One of them had to go. */
+.scene-caption{display:none!important}
+
+/* ==========================================================================================
+   THE RAIL — horizontal reading
+   A sticky stage holds a flex track; a runway underneath provides the vertical scroll that
+   moves it. Native scrolling is never intercepted, so the wheel, trackpad, keyboard, scrollbar
+   and touch all behave normally. Because the runway's height is measured from the track once
+   per layout, the document height never changes mid-scroll — which is what was making the old
+   vertical page stutter.
+   ========================================================================================== */
+html,body{overflow-x:clip;scroll-behavior:auto}
+.experience{position:relative;isolation:isolate}
+.stage{position:sticky;top:0;height:100svh;overflow:hidden;z-index:1}
+.rail{display:flex;align-items:stretch;height:100svh;will-change:transform;backface-visibility:hidden}
+.journey{display:flex;align-items:stretch;height:100svh}
+.runway{width:1px;pointer-events:none}
+
+.journey-section{
+  display:flex;align-items:stretch;
+  flex:0 0 auto;height:100svh;min-height:0;
+  position:relative;
+  border-left:1px solid var(--hair);
+}
+.opening{flex:0 0 100vw;width:100vw;height:100svh;position:relative;overflow:hidden}
+
+/* the title card: one screen, the artifact behind it */
+.panel-title{
+  flex:0 0 100vw;width:100vw;height:100svh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:0 5vw 0 46vw;
+  position:relative;z-index:2;
+}
+@media(max-width:900px){.panel-title{padding:0 7vw;justify-content:flex-end;padding-bottom:22vh}}
+
+/* the reading: prose flows into columns, so the panel grows sideways instead of down */
+.chapter-copy{
+  max-width:none;margin:0;
+  height:100svh;
+  padding:11vh 4vw 12vh!important;
+  background:none!important;
+  column-gap:5vw;column-fill:auto;
+  position:relative;z-index:2;
+}
+/* Prose breaks across columns the way a newspaper does; only the components that would be
+   nonsense when split are kept whole. Headings stay with the paragraph that follows. */
+.chapter-copy>*{break-inside:auto}
+.chapter-copy h3,.chapter-copy h4,.chapter-copy .eyebrow,.block-top{break-after:avoid;break-inside:avoid}
+.story-passage,.career-timeline article,.urbanysis-block{break-inside:auto}
+.career-experience,.urbanysis,.hoop-game,.listening-room,.career-plot,.plot-scroll,
+.reading-notes,.axis-invitation,.current-role,.capabilities,.mpi-list,.bii{break-inside:avoid-column}
+.career-plot,.plot-scroll{max-width:min(78vw,900px)}
+.hoop-game,.listening-room,.current-role,.axis-invitation{max-width:min(44rem,80vw)}
+
+/* the fixed artifact layer introduces a chapter, then gets out of the way of the reading */
+.experience .cinema{opacity:var(--artifact-opacity,1);transition:opacity .22s linear}
+.landing-koi{z-index:0}
+
+/* Each panel paints its own ground and inherits its own tokens, so two chapters can share
+   the screen mid-transition without one borrowing the other's colours. */
+.journey-section,.opening{background:var(--ground);color:var(--fg)}
+.journey-section .panel-title,.journey-section .chapter-copy{color:var(--fg)}
+/* The title sits opposite the artifact, not on top of it. */
+.panel-title .chapter-title{font-family:var(--read);font-optical-sizing:auto;font-style:normal;color:var(--fg);margin:0 0 1.4rem}
+.panel-title .scale-xl{font-size:clamp(4rem,10vw,8.5rem);font-weight:400;letter-spacing:-.045em;line-height:.88}
+.panel-title .scale-lg{font-size:clamp(2.6rem,5.4vw,4.6rem);font-weight:400;letter-spacing:-.03em;line-height:.98;max-width:14ch}
+.panel-title .scale-md{font-size:clamp(2rem,3.4vw,2.9rem);font-weight:400;letter-spacing:-.018em;line-height:1.1;max-width:20ch}
+.panel-title .scale-sm{font-size:clamp(1.5rem,2.4vw,2rem);font-weight:500;letter-spacing:-.01em;line-height:1.18}
+.panel-title .lead{max-width:34ch}
+
+/* ---- motion on the rail -----------------------------------------------------------------
+   Vertical scroll timelines do not fire here — nothing ever enters the viewport from below,
+   so anything keyed to view() was stranded at its opening frame. Motion comes from chapter
+   progress instead: the title drifts against the track as you travel through its chapter,
+   which reads as depth rather than as a parallax trick. */
+
+
+
+html[data-motion=off] .panel-title .chapter-title,
+html[data-motion=off] .panel-title .lead,
+html[data-motion=off] .experience .cinema,
+html[data-motion=off] .landing-koi{transform:none}
+
+/* Big blocks that refuse to split were leaving half-empty columns behind them. Capping their
+   height lets the column keep filling underneath. */
+.current-role,.axis-invitation,.listening-room,.hoop-game{max-height:74vh;overflow:hidden}
+.chapter-copy .big-quote,.chapter-copy .work-evidence,.chapter-copy .side-note{margin-block:1.2rem}
+
+/* ==========================================================================================
+   ENTRANCE ON THE RAIL
+   Each panel publishes --enter (0 → 1) as it travels into view. Contents rise and settle off
+   that. Everything has a visible resting state, so nothing is stranded if the value never
+   arrives.
+   ========================================================================================== */
+.panel-title>*,.chapter-copy>*{
+  opacity:.25;transform:translate3d(42px,0,0);
+  transition:opacity .6s cubic-bezier(.16,.84,.26,1),transform .7s cubic-bezier(.16,.84,.26,1);
+}
+.is-in .panel-title>*,.is-in .chapter-copy>*{opacity:1;transform:none}
+html[data-motion=off] .panel-title>*,html[data-motion=off] .chapter-copy>*{opacity:1;transform:none}
+
+/* ==========================================================================================
+   THE DRUM MACHINE
+   ========================================================================================== */
+.beat{margin:2rem 0;padding:1.6rem;border:1px solid var(--hair);background:var(--surface);max-width:min(46rem,82vw)}
+.beat-head{display:flex;gap:1.2rem;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;margin-bottom:1.3rem}
+.beat-head h4{font-family:var(--display);font-variation-settings:'wdth' 92,'wght' 620;font-size:1.5rem;letter-spacing:-.02em;margin:0 0 .35rem;color:var(--fg)}
+.beat-head p{font-size:.88rem;color:var(--dim);margin:0;max-width:34ch;font-family:var(--ui)}
+.beat-transport{display:flex;align-items:center;gap:.6rem}
+.beat-play{display:flex;align-items:center;gap:.5rem;background:var(--accent);color:var(--ground);padding:.6rem 1rem;font-size:.85rem;font-family:var(--ui)}
+.beat-play:hover{filter:brightness(1.12)}
+.beat-grid{display:grid;gap:.45rem}
+.beat-row{display:grid;grid-template-columns:5.2rem 1fr;gap:.7rem;align-items:center}
+.beat-name{font-family:var(--ui);font-size:.8rem;color:var(--fg);line-height:1.2}
+.beat-name small{display:block;font-size:.66rem;color:var(--dim)}
+.beat-steps{display:grid;grid-template-columns:repeat(16,1fr);gap:.24rem}
+.beat-step{height:2.1rem;border:1px solid var(--hair);background:transparent;transition:background .12s,border-color .12s,transform .1s}
+.beat-step.downbeat{border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+.beat-step.on{background:var(--accent);border-color:var(--accent)}
+.beat-step.now{transform:scaleY(1.16)}
+.beat-step.now:not(.on){background:color-mix(in srgb,var(--fg) 14%,transparent)}
+.beat-step.on.now{background:var(--fg);border-color:var(--fg)}
+.beat-step:hover{border-color:var(--accent)}
+.beat-tempo{display:flex;align-items:center;gap:.8rem;margin-top:1.1rem;font-size:.82rem;color:var(--dim);font-family:var(--ui)}
+.beat-tempo span{color:var(--accent);font-variant-numeric:tabular-nums;min-width:5.4rem}
+.beat-tempo input{flex:1;accent-color:var(--accent)}
+.beat-note{display:block;margin-top:.7rem;font-size:.72rem;color:var(--dim);line-height:1.5}
+@media(max-width:620px){.beat-row{grid-template-columns:1fr}.beat-name{display:flex;gap:.5rem;align-items:baseline}.beat-name small{display:inline}}
+
+/* ==========================================================================================
+   F*CK RESUMES
+   ========================================================================================== */
+.resume-button{color:var(--accent)!important}
+.resume-gag{
+  position:fixed;inset:0;z-index:300;background:var(--ground);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.6rem;
+  padding:6vh 5vw;text-align:center;animation:gagIn .28s ease both;
+}
+@keyframes gagIn{from{opacity:0}to{opacity:1}}
+.resume-close{position:absolute;top:clamp(16px,3vw,30px);right:clamp(16px,3vw,30px)}
+.resume-shout{
+  font-family:var(--display);font-variation-settings:'wdth' 74,'wght' 860;
+  /* twelve characters have to fit on one line at any width, so the size is derived from the
+     character count rather than picked by eye */
+  font-size:min(7.6vw,14vh);line-height:.9;letter-spacing:-.04em;
+  margin:0;color:var(--accent);display:flex;flex-wrap:nowrap;justify-content:center;
+  white-space:nowrap;
+}
+.resume-shout .letter{
+  display:inline-block;
+  animation:jitter var(--dur) ease-in-out var(--delay) infinite alternate;
+  transform-origin:50% 90%;
+}
+.resume-shout .gap{display:inline-block;width:.32em}
+@keyframes jitter{
+  from{transform:translateY(calc(var(--lift) * var(--dir) * -1)) rotate(calc(var(--tilt) * -1)) scale(.96)}
+  to{transform:translateY(calc(var(--lift) * var(--dir))) rotate(var(--tilt)) scale(1.05)}
+}
+.resume-why{font-family:var(--read);font-size:clamp(1rem,1.7vw,1.3rem);line-height:1.5;color:var(--fg);opacity:.8;max-width:46ch;margin:0}
+.resume-actions{display:flex;flex-wrap:wrap;gap:1.2rem;align-items:center;justify-content:center}
+.solid-button{gap:.6rem}
+
+/* One beat occupies the overlay; the next one arrives from the right. */
+.gag-beat{display:flex;flex-direction:column;align-items:center;gap:1.6rem;max-width:min(52rem,90vw);
+  animation:gag-beat .42s cubic-bezier(.2,.8,.2,1) both}
+@keyframes gag-beat{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
+html[data-motion=off] .gag-beat{animation:none}
+.gag-headline{
+  font-family:var(--display);font-variation-settings:'wdth' 82,'wght' 780;
+  font-size:clamp(2.2rem,6vw,4.4rem);letter-spacing:-.045em;line-height:.94;
+  margin:0;color:var(--accent);
+}
+
+/* The document that is technically a resume. Deliberately the ugliest thing on the site. */
+.old-resume{width:min(34rem,86vw);box-shadow:0 24px 60px #00000066;text-align:left}
+.old-resume-bar{
+  display:flex;align-items:center;gap:.4rem;
+  background:linear-gradient(#d8d4cc,#bdb8ae);color:#2b2b2b;
+  font-family:var(--ui);font-size:.66rem;padding:.4rem .6rem;
+  border:1px solid #8d887f;border-bottom:0;
+}
+.old-resume-bar span{width:.62rem;height:.62rem;border:1px solid #6f6a62;background:#cfcac1;display:block}
+.old-resume-bar span:first-child{margin-left:.1rem}
+.old-resume-bar{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.old-resume-page{
+  background:#fff;color:#000;border:1px solid #8d887f;
+  font-family:'Times New Roman',Times,serif;font-size:.82rem;line-height:1.35;
+  padding:1.5rem 1.7rem;max-height:46vh;overflow:hidden;position:relative;
+}
+.old-resume-page::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3.5rem;
+  background:linear-gradient(transparent,#fff)}
+.old-resume-page h3{font-family:inherit;font-size:1.12rem;font-weight:700;text-align:center;
+  letter-spacing:.06em;margin:0 0 .3rem}
+.or-contact{text-align:center;font-size:.72rem;margin:0 0 1rem;color:#333}
+.old-resume-page h4{font-family:inherit;font-size:.82rem;font-weight:700;text-decoration:underline;
+  margin:.9rem 0 .25rem;letter-spacing:.02em}
+.old-resume-page p{font-family:inherit;font-size:.82rem;line-height:1.35;margin:0;color:#000}
+@media(max-width:620px){.old-resume-page{font-size:.76rem;padding:1.1rem 1.2rem}}
+@media(prefers-reduced-motion:reduce){.resume-shout .letter{animation:none}}
+html[data-motion=off] .resume-shout .letter{animation:none}
+
+/* ==========================================================================================
+   PURELY PROFESSIONAL
+   ========================================================================================== */
+.pro-toggle{display:flex;align-items:center;gap:.5rem;font-size:.78rem;font-family:var(--ui);color:var(--dim);padding:.4rem .7rem;border:1px solid var(--hair)}
+.pro-toggle:hover{color:var(--fg);border-color:var(--accent)}
+.pro-toggle.is-on{color:var(--ground);background:var(--accent);border-color:var(--accent)}
+.pro-dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.7}
+html[data-pro=on] .journey-section[data-scene=story],
+html[data-pro=on] .journey-section[data-scene=music],
+html[data-pro=on] .journey-section[data-scene=mind],
+html[data-pro=on] .journey-section[data-scene=india],
+html[data-pro=on] .journey-section[data-scene=play],
+html[data-pro=on] .journey-section[data-scene=future]{display:none}
+html[data-pro=on] .desktop-nav button:nth-child(1),
+html[data-pro=on] .desktop-nav button:nth-child(3){display:none}
+.pro-banner{
+  position:fixed;top:82px;left:50%;transform:translateX(-50%);z-index:60;
+  display:flex;align-items:center;gap:.9rem;flex-wrap:wrap;justify-content:center;
+  background:var(--surface);border:1px solid var(--hair);padding:.6rem 1rem;
+  font-size:.78rem;font-family:var(--ui);color:var(--dim);max-width:92vw;
+}
+.pro-banner strong{color:var(--accent);font-weight:600}
+@media(max-width:760px){.pro-toggle span{display:none}.pro-banner{top:74px;font-size:.72rem}}
+
+/* The koi ring the name, so the name has to sit on top of them — otherwise a fish crosses
+   the subline and you cannot read it. The canvas also gets the full opening, not just the
+   band under the copy, so the orbit is centred on the type. */
+.opening .landing-koi{z-index:0}
+.opening .opening-copy{position:relative;z-index:3}
+.opening .opening-floor{position:relative;z-index:3}
+/* Centre the hero so the ring has even room above and below instead of a dead lower half. */
+.opening{display:flex;flex-direction:column;justify-content:center}
+.opening-copy{padding-top:0!important;padding-bottom:6vh!important;margin-top:-2vh}
+
+/* ---- unfold ---------------------------------------------------------------------------- */
+.unfold{display:inline-flex;align-items:center;gap:.45rem;font-family:var(--ui);font-size:.76rem;
+  color:var(--accent);padding:.35rem 0;margin-top:.4rem;border-bottom:1px solid transparent}
+.unfold:hover{border-bottom-color:var(--accent)}
+.unfold em{font-style:normal;color:var(--dim);font-size:.7rem}
+
+/* ==========================================================================================
+   THE GANGA — float a lamp
+   ========================================================================================== */
+.diya{margin:2rem 0;padding:0;max-width:min(44rem,80vw)}
+.diya figcaption h4{font-family:var(--display);font-variation-settings:'wdth' 92,'wght' 620;font-size:1.45rem;letter-spacing:-.02em;margin:0 0 .4rem;color:var(--fg)}
+.diya figcaption p{font-family:var(--ui)!important;font-size:.86rem!important;line-height:1.6!important;color:var(--dim)!important;opacity:1!important;margin:0 0 1rem;max-width:40ch}
+.diya-river{
+  position:relative;height:16rem;overflow:hidden;cursor:crosshair;
+  border:1px solid var(--hair);
+  background:
+    radial-gradient(120% 80% at 20% 0%, color-mix(in srgb,var(--accent) 16%,transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb,var(--surface) 90%,black), var(--ground));
+}
+.diya-river:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.diya-current{position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(97deg,transparent 0 22px,color-mix(in srgb,var(--fg) 5%,transparent) 22px 23px);
+  animation:drift 9s linear infinite}
+@keyframes drift{from{transform:translateX(0)}to{transform:translateX(23px)}}
+.diya-hint{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--ui);
+  font-size:.76rem;color:var(--dim);pointer-events:none;letter-spacing:.02em}
+.diya-lamp{
+  position:absolute;width:26px;height:12px;margin:-6px 0 0 -13px;pointer-events:none;
+  border-radius:0 0 13px 13px;
+  background:linear-gradient(180deg,#9c6a33,#5d3a18);
+  box-shadow:0 0 18px 5px color-mix(in srgb,#E8A85C 40%,transparent);
+  transform:scale(var(--scale)) rotate(var(--tilt));
+  animation:float var(--dur) linear forwards, bob 3.1s ease-in-out infinite alternate;
+}
+.diya-flame{position:absolute;left:50%;top:-11px;width:8px;height:13px;margin-left:-4px;border-radius:50% 50% 40% 40%;
+  background:radial-gradient(ellipse at 50% 70%,#FFF3D0,#FFC65C 45%,#E8853C 78%,transparent);
+  animation:flicker .45s ease-in-out infinite alternate}
+@keyframes float{from{translate:0 0;opacity:0}8%{opacity:1}85%{opacity:1}to{translate:var(--drift) -6px;opacity:0}}
+@keyframes bob{from{margin-top:-6px}to{margin-top:calc(-6px - var(--bob))}}
+@keyframes flicker{from{transform:scaleY(.86) scaleX(1.05);opacity:.9}to{transform:scaleY(1.12) scaleX(.94);opacity:1}}
+html[data-motion=off] .diya-lamp,html[data-motion=off] .diya-flame,html[data-motion=off] .diya-current{animation:none}
+
+/* ==========================================================================================
+   ARRIVAL
+   Each panel publishes --enter (0 → 1 coming in) and --exit (0 → 1 going out) from the frame
+   loop. Everything below is transform and opacity only — no layout, no paint of anything the
+   compositor cannot hand to the GPU — so the drama costs nothing per frame.
+   ========================================================================================== */
+/* inherits:false is the whole point of registering these. --exit is written to a panel on
+   every frame and is read by exactly one rule — that panel's own transform. Left inheriting,
+   each write invalidates every descendant of the panel; declared non-inheriting, it
+   invalidates the one element that actually uses it. */
+@property --exit{syntax:'<number>';inherits:false;initial-value:0}
+
+.rail{perspective:1500px;perspective-origin:50% 50%}
+
+/* A panel swings in from depth and leans away as it leaves. */
+.journey-section{
+  transform:translate3d(7vw,0,-420px) rotateY(11deg);
+  transform-origin:0% 50%;
+  /* NOT preserve-3d. The panel itself is a 3D child of the rail's perspective, which is all
+     the effect needs — but preserve-3d also drags every descendant into the 3D rendering
+     context, and the compositor then promotes them. That single keyword was producing 387
+     composited layers and hundreds of megabytes of layer memory, which is a GPU cost that
+     never shows up in CPU profiling and is why the scroll stayed heavy after the style
+     recalculation was fixed. Flat: the panel still swings, its contents stay one layer. */
+  transform-style:flat;
+  transition:transform .85s cubic-bezier(.16,.84,.26,1);
+}
+.journey-section.is-in{transform:translate3d(0,0,0) rotateY(calc(var(--exit,0) * -7deg))}
+
+/* Letters arrive one after another, each on its own delay derived from its index. */
+/* The word is the unbreakable unit; the letters move inside it. */
+.chapter-title .word{display:inline-block;white-space:nowrap}
+/* The letters used to read their opacity and transform from --enter, a value written to
+   .panel-title on every animation frame. Custom properties inherit, so each write invalidated
+   the whole title subtree — forty-odd letter spans restyled and REPAINTED every frame, and an
+   opacity driven by a variable cannot be handed to the compositor the way a transition can.
+   That was the scroll cost that survived turning motion off, because motion-off only pinned
+   the letters' final values; the per-frame write and its invalidation carried on regardless.
+   Now the stagger is transition-delay derived from the letter's index — a static value set
+   once at render — and arrival is a single class flip. Identical on screen, nothing per frame. */
+.chapter-title .ch{
+  display:inline-block;
+  opacity:0;
+  /* Translation only. Rotating or scaling text forces the glyphs to be re-rasterised at
+     every step of the animation, which is a paint per frame per letter; a pure translate is
+     handed to the compositor and costs nothing. The drop is longer to make up the drama. */
+  transform:translate3d(0,1.15em,0);
+  transition:opacity .48s cubic-bezier(.16,.84,.26,1),transform .66s cubic-bezier(.16,.84,.26,1);
+  transition-delay:calc(var(--i,0) * 22ms);
+}
+.is-in .chapter-title .ch{opacity:1;transform:none}
+.panel-title .lead{
+  opacity:0;transform:translate3d(3.2rem,0,0);
+  transition:opacity .6s cubic-bezier(.16,.84,.26,1) .22s,transform .8s cubic-bezier(.16,.84,.26,1) .22s;
+}
+.is-in .panel-title .lead{opacity:.78;transform:none}
+
+/* The reading rises into place, each block a beat behind the one before it.
+   Only the first handful of blocks listen to --enter. Every element whose computed style
+   depends on that property has to be recalculated when it changes, and a chapter's prose runs
+   to hundreds of nodes — animating all of them cost more style recalculation than the whole
+   rest of the frame put together. You only ever see the opening of a chapter arrive anyway. */
+.chapter-copy>*:nth-child(-n+10){
+  opacity:.12;transform:translate3d(0,3.6rem,0);
+  transition:opacity .7s cubic-bezier(.16,.84,.26,1),transform .8s cubic-bezier(.16,.84,.26,1);
+}
+.is-in .chapter-copy>*:nth-child(-n+10){opacity:1;transform:none}
+.is-in .chapter-copy>*:nth-child(2){transition-delay:.06s}
+.is-in .chapter-copy>*:nth-child(3){transition-delay:.12s}
+.is-in .chapter-copy>*:nth-child(4){transition-delay:.18s}
+.is-in .chapter-copy>*:nth-child(5){transition-delay:.24s}
+.is-in .chapter-copy>*:nth-child(n+6){transition-delay:.3s}
+
+/* The artifact spins up as its chapter arrives. */
+.experience .cinema{
+  transform:
+    translate3d(calc(var(--chapter-progress,0) * 30px),0,0)
+    scale(calc(0.86 + var(--enter-global,1) * 0.14));
+}
+
+html[data-motion=off] .journey-section,
+html[data-motion=off] .chapter-title .ch,
+html[data-motion=off] .chapter-title .word,
+html[data-motion=off] .panel-title .lead,
+html[data-motion=off] .chapter-copy>*{transform:none!important;opacity:1!important;transition:none}
+html[data-motion=off] .journey-section{transform:none!important;transition:none}
+
+/* Isolate each panel's paint so one chapter's animation cannot dirty its neighbours. */
+.journey-section{contain:layout paint}
+
+/* ==========================================================================================
+   CLOSING THE GAPS
+   The title card was a full screen with copy on only one side of it, which put an empty
+   half-screen between every chapter's reading and the next chapter's opening.
+   ========================================================================================== */
+/* The left pad keeps the title clear of the artifact behind it, but 40vw of it was a void
+   the reader had to travel through between every chapter. Half that clearance still reads. */
+.panel-title{flex:0 0 58vw;width:58vw;padding:0 3vw 0 21vw}
+@media(max-width:900px){.panel-title{flex:0 0 100vw;width:100vw;padding:0 7vw;justify-content:flex-end;padding-bottom:20vh}}
+.chapter-copy{padding:9vh 3.4vw 10vh!important}
+.journey-section{border-left:1px solid var(--hair)}
+/* A seam between chapters, so the change of ground reads as a cut rather than a gap. */
+.journey-section::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:1px;z-index:4;
+  background:linear-gradient(180deg,transparent,var(--accent),transparent);
+  opacity:.5;
+}
+
+/* ==========================================================================================
+   THE FORKS
+   A decision game, not a timeline. Each card is a self-contained unit that must never be
+   split across a column: half a question in one column and its answers in the next is
+   unreadable. The answered state swaps the two buttons for the outcome in place, so the
+   card does not jump height and the rail does not have to re-solve mid-read.
+   ========================================================================================== */
+.decisions{
+  margin:2.2rem 0;padding:1.5rem 1.5rem 1.2rem;
+  border:1px solid var(--hair);background:var(--surface);
+  max-width:min(46rem,82vw);
+  break-inside:avoid-column;
+}
+.decisions-head h3{
+  font-family:var(--display);font-variation-settings:'wdth' 90,'wght' 660;
+  font-size:1.65rem;letter-spacing:-.025em;line-height:1.02;margin:0 0 .6rem;color:var(--fg);
+}
+.decisions-head>p{
+  font-family:var(--ui)!important;font-size:.86rem!important;line-height:1.62!important;
+  color:var(--dim)!important;opacity:1!important;margin:0 0 1.1rem;max-width:46ch;
+}
+.decisions-score{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;
+  border-top:1px solid var(--hair);padding-top:.9rem}
+.score-bar{display:flex;gap:.3rem}
+.score-bar i{
+  display:block;width:1.7rem;height:.28rem;background:color-mix(in srgb,var(--fg) 15%,transparent);
+  transition:background .3s ease,transform .3s cubic-bezier(.2,.8,.2,1);transform-origin:left;
+}
+.score-bar i.done{background:color-mix(in srgb,var(--fg) 40%,transparent);transform:scaleY(1.7)}
+.score-bar i.done.same{background:var(--accent)}
+.score-text{font-family:var(--ui);font-size:.72rem;letter-spacing:.06em;color:var(--dim);
+  font-variant-numeric:tabular-nums}
+
+/* One card occupies the stage; the next one cuts in. A fixed minimum height stops the block
+   changing size between question and answer, which would make the rail re-solve its columns
+   in the middle of somebody reading. */
+.fork-stage{margin-top:1.2rem;min-height:17rem;display:grid;animation:fork-cut .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes fork-cut{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+.fork{
+  border:1px solid var(--hair);padding:1.1rem 1.1rem 1rem;
+  background:color-mix(in srgb,var(--fg) 3%,transparent);
+  transition:border-color .35s ease,background .35s ease;
+}
+.fork.is-answered{border-color:color-mix(in srgb,var(--accent) 40%,transparent)}
+.fork>header{display:flex;justify-content:space-between;gap:1rem;align-items:baseline;
+  font-family:var(--ui);font-size:.68rem;letter-spacing:.14em;margin-bottom:.7rem}
+.fork-when{color:var(--accent);opacity:.85}
+.fork-count{color:var(--dim);font-variant-numeric:tabular-nums}
+.fork-situation{
+  font-family:var(--read)!important;font-size:1.02rem!important;line-height:1.55!important;
+  color:var(--fg)!important;opacity:.92!important;margin:0 0 1rem;
+}
+
+.fork-options{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.fork-option{
+  text-align:left;padding:.85rem .9rem;border:1px solid var(--hair);
+  display:flex;flex-direction:column;gap:.3rem;
+  transition:border-color .2s,background .2s,transform .18s cubic-bezier(.2,.8,.2,1);
+}
+.fork-option strong{font-family:var(--ui);font-size:.88rem;font-weight:600;line-height:1.25;color:var(--fg)}
+.fork-option span{font-family:var(--ui);font-size:.72rem;line-height:1.45;color:var(--dim)}
+.fork-option:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,transparent);
+  transform:translateY(-2px)}
+@media(max-width:620px){.fork-options{grid-template-columns:1fr}}
+
+.fork-result{animation:fork-in .42s cubic-bezier(.2,.8,.2,1) both}
+@keyframes fork-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.fork-verdict{
+  font-family:var(--ui)!important;font-size:.84rem!important;line-height:1.55!important;
+  color:var(--dim)!important;opacity:1!important;margin:0 0 .7rem;
+  padding-bottom:.7rem;border-bottom:1px solid var(--hair);
+}
+.fork-verdict em{font-style:normal;font-weight:600;color:var(--accent);letter-spacing:-.01em}
+.fork-verdict b{font-weight:500;color:var(--fg)}
+.fork-outcome{
+  font-family:var(--read)!important;font-size:1rem!important;line-height:1.55!important;
+  color:var(--fg)!important;opacity:.95!important;margin:0 0 .6rem;
+}
+.fork-reflection{
+  font-family:var(--ui)!important;font-size:.78rem!important;line-height:1.62!important;
+  color:var(--dim)!important;opacity:1!important;margin:0;
+  padding-left:.85rem;border-left:1px solid color-mix(in srgb,var(--accent) 45%,transparent);
+}
+
+.decisions-end{margin-top:1.2rem;padding-top:1rem;border-top:1px solid var(--hair);
+  animation:fork-in .5s cubic-bezier(.2,.8,.2,1) both}
+.decisions-end p{
+  font-family:var(--read)!important;font-style:italic;font-size:1.05rem!important;
+  line-height:1.5!important;color:var(--accent)!important;opacity:1!important;margin:0 0 .8rem;
+}
+.decisions-end .text-link{font-size:.76rem}
+.decisions-nudge{
+  display:flex;align-items:center;gap:.4rem;margin:1rem 0 0;
+  font-family:var(--ui)!important;font-size:.72rem!important;letter-spacing:.1em;
+  color:var(--dim)!important;opacity:1!important;
+}
+.fork-next{
+  display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;
+  font-family:var(--ui);font-size:.82rem;
+  background:var(--accent);color:var(--ground);padding:.6rem 1rem;
+  transition:filter .2s,gap .2s;
+}
+.fork-next:hover{filter:brightness(1.12);gap:.8rem}
+html[data-motion=off] .fork-result,html[data-motion=off] .decisions-end,
+html[data-motion=off] .fork-stage{animation:none}
+
+/* The ending reads the visit back. Nothing left the browser to make it. */
+.closer{margin:0 0 1.4rem}
+.closer h3{
+  font-family:var(--display);font-variation-settings:'wdth' 88,'wght' 640;
+  font-size:clamp(1.6rem,3vw,2.3rem);letter-spacing:-.035em;line-height:1.02;
+  margin:0 0 .6rem;color:var(--fg);
+}
+.closer p{
+  font-family:var(--read)!important;font-size:1.08rem!important;line-height:1.62!important;
+  color:var(--fg)!important;opacity:.85!important;margin:0;max-width:44ch;
+}
+
+/* ==========================================================================================
+   THE RESUME
+   The gag only works if the thing being refused can actually be produced. The sheet is in the
+   DOM at all times, generated from the same narrative.js as the site, and it is invisible
+   until the printer asks for it — at which point everything else steps out of the way.
+   ========================================================================================== */
+.resume-sheet,.gag-sheet{display:none}
+
+@media print{
+  /* Kill the experience: the rail is a transformed, fixed-position construction and there is
+     no version of it that paginates. Print gets the sheet and nothing else. */
+  .experience>*:not(.resume-sheet):not(.gag-sheet){display:none!important}
+  .cinema,.landing-koi,.world-controls,.reading-progress,.masthead,.menu-scrim,
+  .resume-gag,.pro-banner,.skip-link{display:none!important}
+
+  html,body,#root,.experience{
+    background:#fff!important;color:#111!important;
+    height:auto!important;min-height:0!important;overflow:visible!important;
+    margin:0!important;padding:0!important;transform:none!important;
+  }
+  @page{size:letter;margin:0.55in 0.6in}
+
+  /* Two sheets live in the DOM; the button that started the print picks which one the
+     printer sees. Default, if somebody hits Ctrl+P on their own, is the real resume. */
+  .gag-sheet{display:none}
+  html[data-print=gag] .resume-sheet{display:none!important}
+  html[data-print=gag] .gag-sheet{
+    display:flex;align-items:center;justify-content:center;
+    height:9in;font-family:var(--display);font-weight:700;
+    font-size:42pt;letter-spacing:-.04em;color:#111;
+  }
+  .resume-sheet{
+    display:block;
+    font-family:var(--ui);color:#111;font-size:9pt;line-height:1.38;
+  }
+  .resume-sheet *{color:inherit;opacity:1!important;transform:none!important;
+    animation:none!important;transition:none!important;box-shadow:none!important}
+
+  .rs-head{display:flex;justify-content:space-between;align-items:flex-end;gap:1.5rem;
+    border-bottom:1.2pt solid #111;padding-bottom:5pt;margin-bottom:8pt}
+  .rs-head h1{font-family:var(--display);font-variation-settings:'wdth' 88,'wght' 720;
+    font-size:20pt;letter-spacing:-.035em;line-height:.95;margin:0 0 2pt}
+  .rs-role{font-size:8.8pt;margin:0;color:#333}
+  .rs-contact{list-style:none;margin:0;padding:0;text-align:right;font-size:8.2pt;
+    line-height:1.55;color:#333}
+
+  .rs-body{display:grid;grid-template-columns:1.95fr 1fr;gap:0 18pt;align-items:start}
+  .rs-main,.rs-side{min-width:0}
+  .resume-sheet h2{
+    font-family:var(--ui);font-size:7.4pt;font-weight:700;letter-spacing:.17em;
+    text-transform:uppercase;color:#111;margin:0 0 5pt;padding-bottom:2.5pt;
+    border-bottom:.6pt solid #bbb;
+  }
+  .rs-side section+section{margin-top:8pt}
+
+  .rs-role-item{margin-bottom:5pt;break-inside:avoid}
+  .rs-role-line{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6pt;margin-bottom:2pt}
+  .rs-role-line strong{font-size:9.5pt;font-weight:700;letter-spacing:-.01em}
+  .rs-role-line em{font-style:normal;font-size:8.6pt;color:#333}
+  .rs-role-line em::before{content:'· ';color:#999}
+  .rs-role-line time{margin-left:auto;font-size:8pt;color:#555;white-space:nowrap;
+    font-variant-numeric:tabular-nums}
+  .rs-role-item p{margin:0;font-size:8.2pt;line-height:1.35;color:#2a2a2a}
+
+  .rs-caps{list-style:none;margin:0;padding:0}
+  .rs-caps li{margin-bottom:4.5pt;break-inside:avoid}
+  .rs-caps strong{display:block;font-size:9pt;font-weight:700}
+  .rs-caps span{display:block;font-size:8.2pt;line-height:1.42;color:#3a3a3a}
+
+  .rs-edu{margin:0 0 6pt;font-size:8.6pt;line-height:1.45}
+  .rs-edu strong{font-size:9.2pt}
+  .rs-edu span{color:#555;font-size:8pt}
+
+  .rs-also{list-style:none;margin:0;padding:0;font-size:8.4pt;line-height:1.45}
+  .rs-also li{margin-bottom:4pt;break-inside:avoid}
+  .rs-also span{display:block;color:#555;font-size:7.8pt}
+
+  .rs-foot{margin-top:8pt;padding-top:4pt;border-top:.6pt solid #bbb;
+    font-size:7.6pt;line-height:1.5;color:#555;max-width:62ch}
+}
+
+/* ==========================================================================================
+   THE REVERSE INTERVIEW
+   Same overlay grammar as the resume gag — one beat at a time on the ground colour — because
+   they are the same gesture: the site declining the format it was handed.
+   ========================================================================================== */
+.interview{
+  position:fixed;inset:0;z-index:300;background:var(--ground);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:6vh 5vw;text-align:center;animation:gagIn .28s ease both;
+}
+.interview-close{position:absolute;top:clamp(16px,3vw,30px);right:clamp(16px,3vw,30px)}
+.iv-beat{display:flex;flex-direction:column;align-items:center;gap:1.1rem;
+  width:min(40rem,92vw);animation:gag-beat .42s cubic-bezier(.2,.8,.2,1) both}
+.iv-wide{width:min(46rem,92vw)}
+html[data-motion=off] .iv-beat{animation:none}
+
+.iv-shout{
+  font-family:var(--display);font-variation-settings:'wdth' 74,'wght' 860;
+  font-size:min(13vw,7rem);line-height:.9;letter-spacing:-.045em;margin:0;color:var(--accent);
+}
+.iv-count{font-family:var(--ui);font-size:.7rem;letter-spacing:.18em;color:var(--dim);
+  font-variant-numeric:tabular-nums}
+.iv-question{
+  font-family:var(--display);font-variation-settings:'wdth' 86,'wght' 700;
+  font-size:clamp(1.8rem,4.4vw,3.2rem);letter-spacing:-.04em;line-height:1;margin:0;color:var(--fg);
+}
+.iv-why,.iv-hint{
+  font-family:var(--read);font-size:clamp(.98rem,1.5vw,1.18rem);line-height:1.55;
+  color:var(--fg);opacity:.78;max-width:44ch;margin:0;
+}
+.iv-hint{font-family:var(--ui);font-size:.86rem;line-height:1.6;opacity:.6;max-width:50ch}
+
+.iv-field{
+  width:100%;background:var(--surface);color:var(--fg);
+  border:1px solid var(--hair);border-radius:0;padding:1rem 1.1rem;
+  font-family:var(--read);font-size:1.05rem;line-height:1.55;resize:vertical;
+  transition:border-color .2s;
+}
+.iv-field::placeholder{color:var(--dim);opacity:.65}
+.iv-field:focus{outline:none;border-color:var(--accent)}
+
+.iv-actions{display:flex;flex-wrap:wrap;gap:1.1rem;align-items:center;justify-content:center;margin-top:.3rem}
+.iv-actions .solid-button{text-decoration:none}
+.iv-shortcut{font-family:var(--ui);font-size:.68rem;letter-spacing:.1em;color:var(--dim)}
+
+.iv-preview{
+  width:100%;text-align:left;background:var(--surface);border:1px solid var(--hair);
+  padding:1.1rem 1.2rem;margin:0;max-height:38vh;overflow:auto;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.8rem;line-height:1.65;
+  color:var(--fg);opacity:.85;white-space:pre-wrap;word-break:break-word;
+}
+@media(max-width:620px){.iv-shortcut{display:none}}
+
+/* ==========================================================================================
+   SPEEDRUN
+   ========================================================================================== */
+.speedrun-bar{
+  position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 76px);transform:translateX(-50%);
+  z-index:120;display:flex;align-items:center;gap:.8rem;
+  padding:.55rem .75rem .55rem 1rem;
+  background:color-mix(in srgb,var(--surface) 92%,transparent);
+  border:1px solid var(--hair);backdrop-filter:blur(10px);
+  font-family:var(--ui);font-size:.78rem;color:var(--fg);
+  animation:gag-beat .3s ease both;max-width:min(38rem,94vw);
+}
+.speedrun-label{min-width:6.5rem;text-align:left;color:var(--accent)}
+.speedrun-dots{display:flex;gap:.25rem}
+.speedrun-dots i{width:1.1rem;height:.2rem;background:color-mix(in srgb,var(--fg) 18%,transparent);
+  transition:background .3s}
+.speedrun-dots i.done{background:var(--accent)}
+.speedrun-count{color:var(--dim);font-variant-numeric:tabular-nums}
+
+.speedrun-end{
+  position:fixed;left:50%;bottom:clamp(80px,12vh,140px);transform:translateX(-50%);
+  z-index:120;width:min(34rem,92vw);
+  display:flex;flex-direction:column;gap:1rem;
+  padding:1.4rem 1.5rem;background:var(--surface);border:1px solid var(--hair);
+  box-shadow:0 30px 70px #00000070;animation:gag-beat .42s cubic-bezier(.2,.8,.2,1) both;
+}
+.speedrun-end strong{display:block;font-family:var(--display);
+  font-variation-settings:'wdth' 88,'wght' 660;font-size:1.3rem;letter-spacing:-.025em;
+  line-height:1.1;margin-bottom:.45rem;color:var(--fg)}
+.speedrun-end span{font-family:var(--ui);font-size:.85rem;line-height:1.6;color:var(--dim)}
+.speedrun-end-actions{display:flex;flex-wrap:wrap;gap:1rem;align-items:center}
+html[data-motion=off] .speedrun-bar,html[data-motion=off] .speedrun-end{animation:none}
+
+/* ==========================================================================================
+   THE HOUR
+   Deliberately small. It is a remark, not a banner — it sits in the one empty band under the
+   masthead, borrows the chapter's own accent, and takes itself away after nine seconds.
+   ========================================================================================== */
+.hour-note{
+  position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 78px);transform:translateX(-50%);
+  z-index:110;display:flex;align-items:center;gap:.3rem;
+  padding:.4rem .4rem .4rem .9rem;
+  background:color-mix(in srgb,var(--surface) 90%,transparent);
+  border:1px solid color-mix(in srgb,var(--accent) 35%,transparent);
+  backdrop-filter:blur(8px);
+  font-family:var(--read);font-style:italic;font-size:.92rem;line-height:1;
+  color:var(--fg);white-space:nowrap;max-width:94vw;
+  animation:hour-in .55s cubic-bezier(.2,.8,.2,1) both;
+}
+.hour-note .icon-button{width:1.6rem;height:1.6rem;color:var(--dim)}
+@keyframes hour-in{from{opacity:0;transform:translate(-50%,-8px)}to{opacity:1;transform:translate(-50%,0)}}
+html[data-motion=off] .hour-note{animation:none}
+@media(max-width:620px){
+  .hour-note{font-size:.8rem;padding-left:.7rem;white-space:normal;text-align:center}
+  .speedrun-bar{gap:.5rem;font-size:.7rem}
+  .speedrun-label{min-width:0}
+  .speedrun-dots{display:none}
+}
+
+/* The opening row now carries four choices; let it wrap rather than crush. */
+.opening-links{flex-wrap:wrap;row-gap:.8rem}
+.interview-button,.speedrun-button{white-space:nowrap}
+
+/* What is on the desk right now, as distinct from the three that stayed. */
+.reading-now{
+  display:flex;align-items:baseline;flex-wrap:wrap;gap:.2rem .7rem;
+  margin:0 0 1.2rem;padding-bottom:.9rem;border-bottom:1px solid var(--hair);
+}
+.reading-now>span{
+  font-family:var(--ui);font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);flex:0 0 100%;margin-bottom:.35rem;
+}
+.reading-now>strong{font-family:var(--read);font-size:1.45rem;font-weight:500;line-height:1.1;
+  letter-spacing:-.02em;color:var(--fg)}
+.reading-now>em{font-family:var(--ui);font-style:normal;font-size:.82rem;color:var(--dim)}
+
+/* ==========================================================================================
+   THE OPENING ON A PHONE
+   The copy block has a fixed height there, so adding two choices to the link row pushed it
+   into the floor beneath it. A grid gives the five entries honest rows, and the floor's arrow
+   goes — on a phone it was duplicating "Read my story" a centimetre below it.
+   ========================================================================================== */
+@media(max-width:760px){
+  :root{--opening-copy-height:clamp(394px,55svh,510px)}
+  .opening-links{
+    display:grid;grid-template-columns:1fr 1fr;gap:.5rem 1.1rem;
+    width:min(23rem,86vw);margin:1.1rem auto 0;
+  }
+  .opening-links button{
+    justify-content:space-between;width:100%;padding:.45rem 0;
+    font-size:.74rem;gap:.5rem;
+  }
+  .opening-links button:first-child{grid-column:1 / -1}
+  .opening-links button>span{font-size:.8rem}
+  /* The floor is positioned against a height JavaScript measures, so it cannot be kept clear
+     of a link row that grew. On a phone it was only an arrow duplicating the first link and a
+     hint that the page scrolls, which a phone user does not need told. */
+  .opening-floor{display:none}
+  /* The masthead was wrapping its own controls onto two lines. */
+  .pro-toggle{font-size:.66rem;padding:.35rem .6rem}
+  .masthead{gap:.6rem}
+}
+@media(max-width:420px){
+  .opening-links{grid-template-columns:1fr;width:min(17rem,80vw)}
+  .opening-links button:first-child{grid-column:1}
+  .pro-toggle span:not(.pro-dot){display:none}
+}

@@ -38,7 +38,10 @@ The production website is written to `dist/`. Upload its contents to any static 
 | --- | --- |
 | `src/content.js` | Public contact links, name, and book reflections |
 | `src/narrative.js` | Full personal story, all 11 professional roles, and capabilities |
-| `src/App.jsx` | Page content, navigation, reading mode, Spotify and breathing interactions |
+| `src/App.jsx` | Page content, the single frame loop, navigation, reading mode, Spotify and breathing interactions |
+| `src/state.js` | The shared frame store — scroll progress, velocity and the perspective axis |
+| `src/Perspective.jsx` | The perspective axis control and the two-reading crossfade |
+| `src/Urbanysis.jsx` | The Urbanysis depth level and its claim-state markers |
 | `src/Career.jsx` | Career narrative and experience overview |
 | `src/Interactions.jsx` | Perspective exercises and playable basketball |
 | `src/World.jsx` | Scene transitions, camera, lighting, object interaction |
@@ -60,13 +63,21 @@ The professional section leads with Chief Administrative Officer at Directive 17
 
 The full personal story includes values, learning, mediation, the family connection to India, the aarti memory, music, literature, the twin sister as a supporting detail, and the Thanos retirement joke. The former destination list is removed.
 
+**The perspective axis.** Every chapter carries two honest readings: the conviction, as Tushar tells it, and the doubt — the same facts argued against him. One value from -1 to +1 drives the crossfade, the type, the colour grade and the scene lighting at once. It is published as a CSS custom property and read directly by the WebGL loop, so the DOM and the canvas move as one system. Deep links carry it: `#work@0.6` opens that chapter part-way toward the counter-reading.
+
+**One frame loop.** Scroll position, velocity and the axis are held in `src/state.js` and advanced by a single requestAnimationFrame loop that writes custom properties. React re-renders only when the active chapter changes. Nothing re-renders per frame, which is what keeps the landing koi smooth while the page scrolls.
+
+**The build view.** The toggle in the world controls strips every artifact back to the geometry that produced it, with live triangle, vertex, mesh, material and shader counts measured from the scene graph. All of it is generated at runtime; no model was downloaded.
+
+**The career, plotted.** The work chapter offers the narrative, a real month axis from 2022 to the present with concurrent roles visible, and the complete record as a list. Roles carry a tier: the ones that carry the story are emphasised, the rest are present because they happened.
+
 The artifacts are original Three.js geometry with independently animated parts. The cassette has a molded casing, cut-out window, tape windings, reel hubs, screws, and a printed label. The bound book has curved paper signatures, cloth texture, gold tooling, and a turning leaf with separate front and back printing. The stepwell has carved columns, arches, fluted domes, solid masonry, and reflective water. The basketball uses pebble-grain color and normal maps with embedded channels. The retirement island includes a framed fabric chair and individual palm leaflets.
 
 One black koi and one white koi swim in mirrored circular paths along the landing page’s outside margins. Their bodies, tails, and fins move together, and each complete orbit remains inside the screen. The story and contact chapters use the paired koi. Each main artifact has a reserved area that includes its full animated bounds, rotation, hover enlargement, and a separate label lane. The opening uses five columns on large screens and three on tablets. On phones, it becomes a 3D orbit carousel with one large artifact in focus, neighboring objects receding in depth, swipe navigation, automatic progression, and a separate caption card. The artifacts link to their chapters.
 
 Other interactions include two reading reflections, three perspective exercises, a ten-second breathing moment, and a basketball mini-game with adjustable aim, trajectory preview, scoring, and reset. Spotify loads only after the visitor chooses to open the listening room; playback depends on Spotify and the visitor’s region.
 
-Motion respects the device’s reduced-motion setting and has an explicit toggle. The desktop has a “Just the words” mode. Navigation and content remain accessible when WebGL fails. Browser printing removes the 3D canvas and navigation. Fonts are bundled locally. There are no analytics, server-side visitor tracking, AI API calls, or visitor accounts.
+Rendering runs through a small post-processing pass: a chromatic split that only appears while the page is moving, fine overlay grain, a vignette and ACES tone mapping, plus contact shadows so objects sit in space. Chapter entrances use native scroll-driven animation where the browser supports it, with a visible resting state everywhere else. Motion respects the device’s reduced-motion setting and has an explicit toggle. The desktop has a “Just the words” mode. Navigation and content remain accessible when WebGL fails. Browser printing removes the 3D canvas and navigation. Fonts are bundled locally. There are no analytics, server-side visitor tracking, AI API calls, or visitor accounts.
 
 ## Verification and remaining details
 

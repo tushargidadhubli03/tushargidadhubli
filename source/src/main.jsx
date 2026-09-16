@@ -1,0 +1,14 @@
+import React from 'react';
+import {createRoot} from 'react-dom/client';
+import '@fontsource/archivo-black/latin-400.css';
+import '@fontsource-variable/archivo';
+import '@fontsource-variable/newsreader';
+import '@fontsource/dm-sans/latin-400.css';
+import '@fontsource/dm-sans/latin-500.css';
+import '@fontsource/dm-sans/latin-600.css';
+import '@fontsource/cormorant-garamond/latin-500.css';
+import '@fontsource/cormorant-garamond/latin-500-italic.css';
+import App from './App.jsx';
+import './styles.css';
+import './design.css';
+createRoot(document.getElementById('root')).render(<App/>);
